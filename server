@@ -1,0 +1,43 @@
+#! /bin/csh -f
+
+# set location of server file
+set server = ./.servers.txt
+
+# if file doesn't exsist, creates file
+if (! -f $server) then
+	touch $server
+endif
+
+# if used incorrectly, teaches how
+if ($#argv > 1) then
+	echo "Usage: $0 or $0 server"
+	goto done
+endif
+
+# lists out servers
+if ($#argv == 0) then
+	cat $server
+	goto done
+endif
+
+# ssh into asked for server
+set file=$1
+if ($#argv == 1) then
+	set address = `cat $server|grep $file|cut -d : -f 2`
+	echo $address
+	set found = `cat $server|grep $file;echo $?`
+	#if ($found == 1) then
+		#echo "server not found"
+		#goto done
+	#else
+		#echo "server found"
+	#endif
+	echo "ssh into $file"
+	ssh $address
+	goto done
+endif
+
+done:
+	exit 0
+error:
+	exit 1

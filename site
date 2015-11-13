@@ -1,0 +1,26 @@
+#! /bin/csh -f
+
+# location of site file
+set site=~/.sites
+
+if ($#argv > 1) then
+	echo "Usage: $0 or $0 site"
+	goto done
+endif
+
+if ($#argv == 0) then
+	cat $site
+	goto done
+endif
+
+set url=$1
+if ($#argv == 1) then
+	echo "opening $url"
+	set address = `cat $site|grep $url|awk '{print substr($0,19)}'`
+	echo "$address"
+	open $address
+	goto done
+endif
+
+done:
+	exit 0
